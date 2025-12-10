@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>饮食记录 - 健身管理APP</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>饮食记录</h1>
+
+        <!-- 日期选择 -->
+        <div style="text-align: center; margin-bottom: 20px;">
+            <button id="datePicker" class="btn btn-primary">今日 <span id="currentDate"></span></button>
+        </div>
+
+        <!-- 热量统计卡片 -->
+        <div class="circle-cards">
+            <div class="circle-card small">
+                <div class="value" id="foodCalories">0.0</div>
+                <div class="label">饮食摄入</div>
+                <div class="label">大卡</div>
+            </div>
+            <div class="circle-card large calorie-gap-circle">
+                <div class="value" id="calorieDeficit">0.0</div>
+                <div class="label">热量缺口</div>
+                <div class="label">大卡</div>
+            </div>
+            <div class="circle-card small">
+                <div class="value" id="exerciseCalories">0.0</div>
+                <div class="label">运动消耗</div>
+                <div class="label">大卡</div>
+            </div>
+        </div>
+
+        <!-- 食物分类 -->
+        <div>
+            <!-- 早餐 -->
+            <div style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h3>早餐</h3>
+                    <button class="btn btn-primary" onclick="openAddFoodModal('breakfast')">+</button>
+                </div>
+                <div id="breakfastList" class="item-list"></div>
+            </div>
+
+            <!-- 午餐 -->
+            <div style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h3>午餐</h3>
+                    <button class="btn btn-primary" onclick="openAddFoodModal('lunch')">+</button>
+                </div>
+                <div id="lunchList" class="item-list"></div>
+            </div>
+
+            <!-- 晚餐 -->
+            <div style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h3>晚餐</h3>
+                    <button class="btn btn-primary" onclick="openAddFoodModal('dinner')">+</button>
+                </div>
+                <div id="dinnerList" class="item-list"></div>
+            </div>
+
+            <!-- 加餐 -->
+            <div style="margin-bottom: 80px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h3>加餐</h3>
+                    <button class="btn btn-primary" onclick="openAddFoodModal('snack')">+</button>
+                </div>
+                <div id="snackList" class="item-list"></div>
+            </div>
+        </div>
+
+        <!-- 保存按钮 -->
+        <div style="position: fixed; bottom: 70px; left: 0; right: 0; padding: 0 20px; max-width: 480px; margin: 0 auto;">
+            <button class="btn btn-primary" onclick="saveDietRecord()">保存今日记录</button>
+        </div>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <div class="nav">
+        <button class="nav-btn" data-page="index">
+            <i>👤</i>
+            <span>个人</span>
+        </button>
+        <button class="nav-btn active" data-page="diet">
+            <i>🍽️</i>
+            <span>饮食</span>
+        </button>
+        <button class="nav-btn" data-page="exercise">
+            <i>🏃</i>
+            <span>运动</span>
+        </button>
+        <button class="nav-btn" data-page="advice">
+            <i>💡</i>
+            <span>建议</span>
+        </button>
+    </div>
+
+    <!-- 日期选择弹窗 -->
+        <div id="calendarModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">选择日期 <span class="modal-title-date"></span></h3>
+                    <button class="btn-close" onclick="closeCalendarModal()">&times;</button>
+                </div>
+                <div id="calendarContainer" class="calendar"></div>
+                <div style="display: flex; justify-content: flex-end; margin-top: 20px;">
+                    <button class="btn btn-secondary" onclick="closeCalendarModal()">取消</button>
+                    <button class="btn btn-primary" onclick="confirmDateSelection()" style="margin-left: 10px;">确认</button>
+                </div>
+            </div>
+        </div>
+
+    <!-- 食物添加弹窗 -->
+    <div id="addFoodModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">添加食物</h3>
+                <button class="btn-close" onclick="closeAddFoodModal()">&times;</button>
+            </div>
+            <div>
+                <div class="input-group">
+                    <label for="foodSearch">搜索食物</label>
+                    <input type="text" id="foodSearch" placeholder="输入食物名称">
+                </div>
+                <div id="foodSearchResults" class="item-list" style="max-height: 200px; overflow-y: auto;"></div>
+                <div id="manualAddSection" style="display: none;">
+                    <h3>手动添加食物</h3>
+                    <div class="input-group">
+                        <label for="manualFoodName">食物名称</label>
+                        <input type="text" id="manualFoodName" placeholder="输入食物名称">
+                    </div>
+                    <div class="input-group">
+                        <label for="manualFoodCategory">食物分类</label>
+                        <select id="manualFoodCategory" disabled>
+                            <option value="自定义" selected>自定义</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="manualFoodWeight">克数 (g)</label>
+                        <input type="number" id="manualFoodWeight" placeholder="输入克数" min="0.1" step="0.1" value="100">
+                    </div>
+                    <div class="input-group">
+                        <label for="manualFoodCalories">热量 (大卡/100g)</label>
+                        <input type="number" id="manualFoodCalories" placeholder="输入热量" min="0" step="0.1">
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="saveToDatabase" checked>
+                        <label for="saveToDatabase">保存到数据库</label>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="addManualFood()">添加手动食物</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 克数输入弹窗 -->
+    <div id="weightInputModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">输入克数</h3>
+                <button class="btn-close" onclick="closeWeightInputModal()">&times;</button>
+            </div>
+            <div>
+                <div class="input-group">
+                    <label for="foodWeight">克数 (g)</label>
+                    <input type="number" id="foodWeight" placeholder="输入克数" min="0.1" step="0.1">
+                </div>
+                <div style="text-align: center; margin: 15px 0;">
+                    <div>热量：<span id="calculatedCalories">0.0</span> 大卡</div>
+                </div>
+                <button class="btn btn-primary" onclick="confirmFoodAddition()">确认添加</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑自定义食物弹窗 -->
+    <div id="editFoodModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">编辑自定义食物</h3>
+                <button class="btn-close" onclick="closeEditFoodModal()">&times;</button>
+            </div>
+            <div>
+                <div class="input-group">
+                    <label for="editFoodName">食物名称</label>
+                    <input type="text" id="editFoodName" readonly>
+                </div>
+                <div class="input-group">
+                    <label for="editFoodCalories">热量 (大卡/100g)</label>
+                    <input type="number" id="editFoodCalories" placeholder="输入热量" min="0" step="0.1">
+                </div>
+                <div style="text-align: center; margin: 15px 0;">
+                    <div>修改后，后续添加此食物将使用新的热量值</div>
+                </div>
+                <button class="btn btn-primary" onclick="confirmEditFood()">确认修改</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/food-db.js"></script>
+        <script src="js/common.js"></script>
+        <script src="js/app.js"></script>
+    <script>
+        // 饮食记录页初始化
+        let currentSelectedDate = new Date();
+        let currentMealType = '';
+        let selectedFood = null;
+        let calendar = null;
+        let foodModal = null;
+        let weightModal = null;
+        let calendarModal = null;
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化日期显示
+            updateDateDisplay();
+            
+            // 初始化日历
+            calendarModal = new Modal(document.getElementById('calendarModal'));
+            calendar = new Calendar(document.getElementById('calendarContainer'), {
+                currentDate: currentSelectedDate,
+                onDateSelect: function(date) {
+                    // 更新当前选中日期
+                    currentSelectedDate = date;
+                    // 更新日期显示
+                    updateDateDisplay();
+                    // 加载对应日期的饮食记录
+                    loadDietRecord();
+                    // 更新热量统计
+                    updateCalorieStatistics();
+                }
+            });
+            
+            // 监听月份切换按钮，确保切换月份后重新渲染高亮
+        document.addEventListener('click', function(e) {
+            if (e.target.id === 'prev-month' || e.target.id === 'next-month') {
+                // 延迟执行确保日历DOM已重新渲染
+                setTimeout(highlightSurplusDates, 100);
+            }
+        });
+            
+            // 初始化弹窗
+            foodModal = new Modal(document.getElementById('addFoodModal'));
+            weightModal = new Modal(document.getElementById('weightInputModal'));
+            
+            // 加载饮食记录
+            loadDietRecord();
+            
+            // 更新热量统计
+            updateCalorieStatistics();
+            
+            // 日期选择器点击事件
+            document.getElementById('datePicker').addEventListener('click', function() {
+            calendarModal.open();
+            // 延迟执行确保日历DOM已渲染
+            setTimeout(highlightSurplusDates, 100);
+        });
+            
+            // 食物搜索事件 - 强制激活
+            document.getElementById('foodSearch').addEventListener('input', function() {
+                const keyword = this.value;
+                if (keyword) {
+                    // 直接遍历FOOD_DB全局数组，匹配名称含关键词的食物
+                    const results = [];
+                    const lowerKeyword = keyword.toLowerCase();
+                    FOOD_DB.forEach(food => {
+                        if (food.name.toLowerCase().includes(lowerKeyword)) {
+                            results.push({
+                                id: `${food.category.toLowerCase()}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                                name: food.name,
+                                calories: food.calorie,
+                                category: food.category
+                            });
+                        }
+                    });
+                    displayFoodSearchResults(results);
+                } else {
+                    document.getElementById('foodSearchResults').innerHTML = '';
+                    document.getElementById('manualAddSection').style.display = 'none';
+                }
+            });
+            
+            // 手动添加食物按钮点击事件 - 强制激活
+            const manualAddBtn = document.querySelector('[onclick="addManualFood()"]');
+            manualAddBtn.className = 'btn btn-primary';
+            manualAddBtn.innerHTML = '手动添加食物';
+            manualAddBtn.addEventListener('click', function() {
+                // 切换手动添加表单显示状态
+                const manualSection = document.getElementById('manualAddSection');
+                manualSection.style.display = manualSection.style.display === 'none' ? 'block' : 'none';
+            });
+            
+            // 克数输入事件
+            document.getElementById('foodWeight').addEventListener('input', function() {
+                if (selectedFood && this.value) {
+                    const weight = parseFloat(this.value);
+                    const calories = (weight / 100) * selectedFood.calories;
+                    document.getElementById('calculatedCalories').textContent = Utils.toFixedOne(calories);
+                }
+            });
+        });
+
+        // 更新日期显示
+        function updateDateDisplay() {
+            document.getElementById('currentDate').textContent = Utils.formatDate(currentSelectedDate);
+        }
+
+        // 打开日期选择弹窗
+        function openCalendarModal() {
+            calendarModal.open();
+        }
+
+        // 关闭日期选择弹窗
+        function closeCalendarModal() {
+            calendarModal.close();
+        }
+
+        // 确认日期选择
+        function confirmDateSelection() {
+            const selectedDate = calendar.getSelectedDate();
+            if (selectedDate) {
+                currentSelectedDate = selectedDate;
+                updateDateDisplay();
+                loadDietRecord();
+                updateCalorieStatistics();
+                calendarModal.close();
+            }
+        }
+
+        // 打开食物添加弹窗
+        function openAddFoodModal(mealType) {
+            currentMealType = mealType;
+            // 重置搜索框和结果
+            document.getElementById('foodSearch').value = '';
+            document.getElementById('foodSearchResults').innerHTML = '';
+            document.getElementById('manualAddSection').style.display = 'none';
+            foodModal.open();
+        }
+
+        // 关闭食物添加弹窗
+        function closeAddFoodModal() {
+            foodModal.close();
+        }
+
+        // 显示食物搜索结果 - 强制激活
+        function displayFoodSearchResults(results) {
+            const resultsContainer = document.getElementById('foodSearchResults');
+            resultsContainer.innerHTML = '';
+            
+            if (results.length > 0) {
+                results.forEach(food => {
+                    const li = document.createElement('li');
+                    li.className = 'search-result-item';
+                    li.style.cssText = 'padding: 10px; border-bottom: 1px solid #eee; cursor: pointer; display: flex; justify-content: space-between; align-items: center;';
+                    li.innerHTML = `
+                        <span>${food.name} (${food.calories}大卡/100g)</span>
+                    `;
+                    li.onclick = function() {
+                        selectFood(food);
+                    };
+                    resultsContainer.appendChild(li);
+                });
+                document.getElementById('manualAddSection').style.display = 'none';
+            } else {
+                resultsContainer.innerHTML = '<div style="text-align: center; color: #999; padding: 10px;">未找到匹配的食物</div>';
+                // 搜索无结果时，自动显示手动添加按钮
+                document.getElementById('manualAddSection').style.display = 'block';
+            }
+        }
+
+        // 选择食物
+        function selectFood(food) {
+            selectedFood = food;
+            document.getElementById('foodWeight').value = '';
+            document.getElementById('calculatedCalories').textContent = '0.0';
+            closeAddFoodModal();
+            weightModal.open();
+        }
+
+        // 关闭克数输入弹窗
+        function closeWeightInputModal() {
+            weightModal.close();
+        }
+
+        // 确认添加食物
+        function confirmFoodAddition() {
+            const weight = parseFloat(document.getElementById('foodWeight').value);
+            if (selectedFood && weight && weight > 0) {
+                const calories = (weight / 100) * selectedFood.calories;
+                const foodRecord = {
+                    id: Date.now().toString(),
+                    name: selectedFood.name,
+                    weight: weight,
+                    quantity: weight / 100, // 转换为以100g为单位的分量
+                    calories: Utils.toFixedOne(calories),
+                    mealType: currentMealType
+                };
+                
+                // 添加到饮食记录
+                const record = DataManager.getDietRecord(currentSelectedDate);
+                record.foods.push(foodRecord);
+                DataManager.saveDietRecord(currentSelectedDate, record);
+                
+                // 计算并更新todayDietIntake到localStorage
+                const todayDietIntake = DataManager.calculateDailyFoodCalories(currentSelectedDate);
+                localStorage.setItem('todayDietIntake', todayDietIntake);
+                
+                // 更新显示
+                loadDietRecord();
+                updateCalorieStatistics();
+                calculateCalorieBalance();
+                
+                // 关闭弹窗
+                weightModal.close();
+                selectedFood = null;
+                
+                // 触发智能建议刷新
+                localStorage.setItem('adviceRefreshNeeded', 'true');
+            } else {
+                alert('请输入有效的克数');
+            }
+        }
+
+        // 编辑自定义食物
+        let currentEditFoodName = '';
+        
+        function editCustomFood(foodName) {
+            currentEditFoodName = foodName;
+            
+            // 查找该食物在数据库中的信息
+            const targetFood = FOOD_DB.find(item => item.name === foodName && item.category === '自定义');
+            if (targetFood) {
+                // 显示编辑弹窗
+                document.getElementById('editFoodName').value = foodName;
+                document.getElementById('editFoodCalories').value = targetFood.calorie;
+                document.getElementById('editFoodModal').style.display = 'block';
+            }
+        }
+        
+        function closeEditFoodModal() {
+            document.getElementById('editFoodModal').style.display = 'none';
+            currentEditFoodName = '';
+        }
+        
+        function confirmEditFood() {
+        const newCalorie = parseFloat(document.getElementById('editFoodCalories').value);
+        
+        if (isNaN(newCalorie) || newCalorie < 0) {
+            alert('请填写有效的热量值');
+            return;
+        }
+        
+        // 调用全局函数修改数据库中的食物
+        editFoodInDB(currentEditFoodName, newCalorie);
+        
+        // 更新当前记录中使用该食物的条目
+        const record = DataManager.getDietRecord(currentSelectedDate);
+        record.foods.forEach(food => {
+            if (food.name === currentEditFoodName && (food.isCustom || food.category === '自定义')) {
+                // 重新计算热量：(新的每100g热量/100)*克数
+                food.calories = Utils.toFixedOne((newCalorie / 100) * food.weight);
+            }
+        });
+        DataManager.saveDietRecord(currentSelectedDate, record);
+        
+        // 计算并更新todayDietIntake到localStorage
+        const todayDietIntake = DataManager.calculateDailyFoodCalories(currentSelectedDate);
+        localStorage.setItem('todayDietIntake', todayDietIntake);
+        
+        // 更新显示
+        loadDietRecord();
+        updateCalorieStatistics();
+        calculateCalorieBalance();
+        
+        // 触发智能建议刷新
+        localStorage.setItem('adviceRefreshNeeded', 'true');
+        
+        // 关闭弹窗
+        closeEditFoodModal();
+        
+        alert('食物热量已更新');
+    }
+        
+        // 添加手动食物 - 强制激活
+        function addManualFood() {
+            const manualSection = document.getElementById('manualAddSection');
+            
+            // 如果手动添加表单已经显示，则处理添加逻辑
+            if (manualSection.style.display === 'block') {
+                const name = document.getElementById('manualFoodName').value;
+                const weight = parseFloat(document.getElementById('manualFoodWeight').value) || 100;
+                const caloriesPer100g = parseFloat(document.getElementById('manualFoodCalories').value);
+                const saveToDatabase = document.getElementById('saveToDatabase').checked;
+                
+                // 必填项校验
+                if (!name.trim()) {
+                    alert('请填写食物名称');
+                    return;
+                }
+                if (isNaN(weight) || weight <= 0) {
+                    alert('请填写有效的克数');
+                    return;
+                }
+                if (isNaN(caloriesPer100g) || caloriesPer100g < 0) {
+                    alert('请填写有效的热量值');
+                    return;
+                }
+                
+                // 计算热量：(每100g热量/100)*克数
+                const calories = (caloriesPer100g / 100) * weight;
+                const foodRecord = {
+                    id: Date.now().toString(),
+                    name: name,
+                    weight: weight,
+                    quantity: weight / 100, // 转换为以100g为单位的分量
+                    calories: Utils.toFixedOne(calories),
+                    mealType: currentMealType,
+                    category: '自定义',
+                    isCustom: true
+                };
+                
+                // 如果勾选了保存到数据库
+                if (saveToDatabase) {
+                    // 检查是否已存在同名的自定义食物
+                    const existingFood = FOOD_DB.find(item => item.name === name && item.category === '自定义');
+                    if (!existingFood) {
+                        // 调用全局函数添加到数据库
+                        addFoodToDB({
+                            name: name,
+                            category: '自定义',
+                            calorie: caloriesPer100g
+                        });
+                    }
+                }
+                
+                // 添加到饮食记录
+                const record = DataManager.getDietRecord(currentSelectedDate);
+                record.foods.push(foodRecord);
+                DataManager.saveDietRecord(currentSelectedDate, record);
+                
+                // 计算并更新todayDietIntake到localStorage
+                const todayDietIntake = DataManager.calculateDailyFoodCalories(currentSelectedDate);
+                localStorage.setItem('todayDietIntake', todayDietIntake);
+                
+                // 更新显示
+                loadDietRecord();
+                updateCalorieStatistics();
+                calculateCalorieBalance();
+                
+                // 触发智能建议刷新
+                localStorage.setItem('adviceRefreshNeeded', 'true');
+                
+                // 关闭弹窗
+                foodModal.close();
+                
+                // 重置手动添加表单
+                document.getElementById('manualFoodName').value = '';
+                document.getElementById('manualFoodWeight').value = '100';
+                document.getElementById('manualFoodCalories').value = '';
+                document.getElementById('saveToDatabase').checked = true;
+                manualSection.style.display = 'none';
+            } else {
+                // 否则显示手动添加表单
+                manualSection.style.display = 'block';
+            }
+        }
+
+        // 加载饮食记录
+        function loadDietRecord() {
+            const record = DataManager.getDietRecord(currentSelectedDate);
+            
+            // 清空所有餐食列表
+            ['breakfast', 'lunch', 'dinner', 'snack'].forEach(mealType => {
+                document.getElementById(`${mealType}List`).innerHTML = '';
+            });
+            
+            // 按餐食类型显示食物
+            record.foods.forEach(food => {
+                const list = document.getElementById(`${food.mealType}List`);
+                const foodItem = document.createElement('div');
+                foodItem.className = 'item';
+                foodItem.dataset.id = food.id;
+                
+                // 检查是否为自定义食物
+                const isCustomFood = food.isCustom || food.category === '自定义';
+                
+                foodItem.innerHTML = `
+                    <div>
+                        <div class="name">${food.name}</div>
+                        <div style="font-size: 12px; color: #999;">${food.weight}g</div>
+                        ${isCustomFood ? '<div style="font-size: 12px; color: #5cb85c;">[自定义]</div>' : ''}
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="calories">${food.calories} 大卡</div>
+                        ${isCustomFood ? `<button class="btn-edit" onclick="editCustomFood('${food.name}')">编辑</button>` : ''}
+                        <button class="btn-delete" onclick="deleteFood('${food.id}')">&times;</button>
+                    </div>
+                `;
+                list.appendChild(foodItem);
+            });
+        }
+
+        // 删除食物
+        function deleteFood(foodId) {
+            const record = DataManager.getDietRecord(currentSelectedDate);
+            record.foods = record.foods.filter(food => food.id !== foodId);
+            DataManager.saveDietRecord(currentSelectedDate, record);
+            
+            // 计算并更新todayDietIntake到localStorage
+            const todayDietIntake = DataManager.calculateDailyFoodCalories(currentSelectedDate);
+            localStorage.setItem('todayDietIntake', todayDietIntake);
+            
+            loadDietRecord();
+            updateCalorieStatistics();
+            calculateCalorieBalance();
+            
+            // 触发智能建议刷新
+            localStorage.setItem('adviceRefreshNeeded', 'true');
+        }
+
+        // 更新热量统计
+        function updateCalorieStatistics() {
+            const userInfo = DataManager.getUserInfo();
+            const foodCalories = DataManager.calculateDailyFoodCalories(currentSelectedDate);
+            const exerciseCalories = DataManager.calculateDailyExerciseCalories(currentSelectedDate);
+            
+            // 更新显示
+            document.getElementById('foodCalories').textContent = Utils.toFixedOne(foodCalories);
+            document.getElementById('exerciseCalories').textContent = Utils.toFixedOne(exerciseCalories);
+            
+            // 更新localStorage中的值
+            localStorage.setItem('todayDietIntake', foodCalories);
+            localStorage.setItem('todayExerciseCalorie', exerciseCalories);
+            if (userInfo && userInfo.tdee) {
+                localStorage.setItem('userTDEE', userInfo.tdee);
+            }
+        }
+
+        // 保存饮食记录
+        function saveDietRecord() {
+            alert('今日饮食记录已保存！');
+            // 保存后重新渲染日历高亮
+            highlightSurplusDates();
+            // 通知智能建议页面刷新
+            localStorage.setItem('adviceRefreshNeeded', 'true');
+        }
+    </script>
+</body>
+</html>

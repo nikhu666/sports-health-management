@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>我的运动 - 健身管理APP</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>我的运动</h1>
+
+        <!-- 今日运动总消耗 -->
+        <div style="text-align: center; margin-bottom: 30px;">
+            <div class="circle-card large" style="display: inline-block;">
+                <div class="value" id="totalExerciseCalories">0.0</div>
+                <div class="label">运动消耗</div>
+                <div class="label">大卡</div>
+            </div>
+        </div>
+
+        <!-- 有氧运动区 -->
+        <div style="margin-bottom: 30px;">
+            <h3>有氧运动</h3>
+            <div class="exercise-grid">
+                <button class="exercise-btn aerobic-btn" onclick="openDurationInput('跑步', 8.0, 'aerobic')">跑步</button>
+                <button class="exercise-btn aerobic-btn" onclick="openDurationInput('跳绳', 10.0, 'aerobic')">跳绳</button>
+                <button class="exercise-btn aerobic-btn" onclick="openDurationInput('爬楼梯', 7.5, 'aerobic')">爬楼梯</button>
+                <button class="exercise-btn aerobic-btn" onclick="openDurationInput('散步', 3.5, 'aerobic')">散步</button>
+                <button class="exercise-btn aerobic-btn" onclick="openDurationInput('游泳', 7.0, 'aerobic')">游泳</button>
+                <button class="exercise-btn aerobic-btn" onclick="openDurationInput('骑自行车', 6.8, 'aerobic')">骑自行车</button>
+                <button class="exercise-btn aerobic-btn" onclick="openDurationInput('有氧舞蹈', 6.0, 'aerobic')">有氧舞蹈</button>
+                <button class="exercise-btn aerobic-btn" onclick="openDurationInput('椭圆机', 5.5, 'aerobic')">椭圆机</button>
+            </div>
+            <button class="btn btn-primary" onclick="openManualAerobicModal()" style="margin-top: 15px; width: 100%;">手动添加有氧运动</button>
+            <div id="aerobicExerciseList" class="item-list aerobic-exercise-list" style="margin-top: 20px;"></div>
+        </div>
+
+        <!-- 无氧运动区 -->
+        <div style="margin-bottom: 80px;">
+            <h3>无氧运动</h3>
+            <div class="exercise-grid">
+                <button class="exercise-btn anaerobic-btn" onclick="openDurationInput('胸部', 6.0, 'anaerobic')">胸部</button>
+                <button class="exercise-btn anaerobic-btn" onclick="openDurationInput('背部', 5.5, 'anaerobic')">背部</button>
+                <button class="exercise-btn anaerobic-btn" onclick="openDurationInput('腿部', 7.0, 'anaerobic')">腿部</button>
+                <button class="exercise-btn anaerobic-btn" onclick="openDurationInput('手臂', 4.5, 'anaerobic')">手臂</button>
+                <button class="exercise-btn anaerobic-btn" onclick="openDurationInput('肩膀', 5.0, 'anaerobic')">肩膀</button>
+                <button class="exercise-btn anaerobic-btn" onclick="openDurationInput('腹部', 4.0, 'anaerobic')">腹部</button>
+            </div>
+            <div id="anaerobicExerciseList" class="item-list anaerobic-exercise-list" style="margin-top: 20px;"></div>
+        </div>
+
+        <!-- 保存按钮 -->
+        <div style="position: fixed; bottom: 70px; left: 0; right: 0; padding: 0 20px; max-width: 480px; margin: 0 auto;">
+            <button class="btn btn-primary" onclick="saveExerciseRecord()">保存今日运动</button>
+        </div>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <div class="nav">
+        <button class="nav-btn" data-page="index">
+            <i>👤</i>
+            <span>个人</span>
+        </button>
+        <button class="nav-btn" data-page="diet">
+            <i>🍽️</i>
+            <span>饮食</span>
+        </button>
+        <button class="nav-btn active" data-page="exercise">
+            <i>🏃</i>
+            <span>运动</span>
+        </button>
+        <button class="nav-btn" data-page="advice">
+            <i>💡</i>
+            <span>建议</span>
+        </button>
+    </div>
+
+    <!-- 时长输入弹窗 -->
+    <div id="durationInputModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">输入时长</h3>
+                <button class="btn-close" onclick="closeDurationInputModal()">&times;</button>
+            </div>
+            <div>
+                <div class="input-group">
+                    <label for="exerciseDuration">时长 (分钟)</label>
+                    <input type="number" id="exerciseDuration" placeholder="输入时长" min="1" step="1">
+                </div>
+                <div style="text-align: center; margin: 15px 0;">
+                    <div>热量消耗：<span id="calculatedExerciseCalories">0.0</span> 大卡</div>
+                </div>
+                <button class="btn btn-primary" onclick="confirmExerciseAddition()">确认添加</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 手动添加有氧运动弹窗 -->
+    <div id="manualAerobicModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">手动添加有氧运动</h3>
+                <button class="btn-close" onclick="closeManualAerobicModal()">&times;</button>
+            </div>
+            <div>
+                <div class="input-group">
+                    <label for="manualExerciseName">运动名称</label>
+                    <input type="text" id="manualExerciseName" placeholder="输入运动名称">
+                </div>
+                <div class="input-group">
+                    <label for="manualExerciseDuration">时长 (分钟)</label>
+                    <input type="number" id="manualExerciseDuration" placeholder="输入时长" min="1" step="1">
+                </div>
+                <div class="input-group">
+                    <label for="manualExerciseCalories">热量消耗 (大卡)</label>
+                    <input type="number" id="manualExerciseCalories" placeholder="输入热量" min="0" step="0.1">
+                </div>
+                <button class="btn btn-primary" onclick="addManualAerobicExercise()">确认添加</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // 运动记录页初始化
+        let currentExercise = null;
+        let durationModal = null;
+        let manualAerobicModal = null;
+        let currentDate = new Date();
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化弹窗
+            durationModal = new Modal(document.getElementById('durationInputModal'));
+            manualAerobicModal = new Modal(document.getElementById('manualAerobicModal'));
+            
+            // 加载运动记录
+            loadExerciseRecord();
+            
+            // 更新总消耗
+            updateTotalExerciseCalories();
+            
+            // 时长输入事件
+            document.getElementById('exerciseDuration').addEventListener('input', function() {
+                if (currentExercise && this.value) {
+                    const duration = parseFloat(this.value);
+                    const calories = calculateExerciseCalories(currentExercise.name, currentExercise.met, duration);
+                    document.getElementById('calculatedExerciseCalories').textContent = Utils.toFixedOne(calories);
+                }
+            });
+            
+            // 记录最近点击的运动名称
+            let lastClickedSport = '';
+            
+            // 为上方每个运动按钮绑定点击事件，自动传递运动名称
+            document.querySelectorAll('.exercise-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 获取按钮对应的运动名称（如“跑步”“跳绳”）
+                    const sportName = this.textContent.trim();
+                    lastClickedSport = sportName;
+                    
+                    // 替换历史“未知运动”记录
+                    const unknownRecords = document.querySelectorAll('.exercise-name');
+                    const record = DataManager.getExerciseRecord(currentDate);
+                    let updated = false;
+                    
+                    unknownRecords.forEach((span, index) => {
+                        if (span.textContent === '未知运动' && record.exercises[index]) {
+                            span.textContent = lastClickedSport;
+                            // 同步更新DataManager中的数据
+                            record.exercises[index].name = lastClickedSport;
+                            updated = true;
+                        }
+                    });
+                    
+                    // 如果有更新，保存并重新加载
+                    if (updated) {
+                        DataManager.saveExerciseRecord(currentDate, record);
+                        loadExerciseRecord();
+                    }
+                });
+            });
+        });
+
+        // 计算运动热量消耗
+        function calculateExerciseCalories(name, met, durationMinutes) {
+            const userInfo = DataManager.getUserInfo();
+            if (!userInfo || !userInfo.weight) {
+                alert('请先在个人信息页填写体重！');
+                return 0;
+            }
+            
+            const weight = userInfo.weight;
+            const durationHours = durationMinutes / 60;
+            const calories = met * weight * durationHours;
+            return calories;
+        }
+
+        // 打开时长输入弹窗
+        function openDurationInput(exerciseName, met, type) {
+            currentExercise = { name: exerciseName, met, type };
+            document.getElementById('exerciseDuration').value = '';
+            document.getElementById('calculatedExerciseCalories').textContent = '0.0';
+            // 更新弹窗标题，显示当前运动名称
+            const modalTitle = document.querySelector('.modal-title');
+            if (modalTitle) {
+                modalTitle.textContent = `输入${exerciseName}时长`;
+            }
+            durationModal.open();
+        }
+
+        // 关闭时长输入弹窗
+        function closeDurationInputModal() {
+            durationModal.close();
+        }
+
+        // 确认添加运动
+        function confirmExerciseAddition() {
+            const duration = parseInt(document.getElementById('exerciseDuration').value);
+            if (currentExercise && duration && duration > 0) {
+                const sportName = currentExercise.name;
+                const exerciseType = currentExercise.type || 'aerobic';
+                
+                const calories = calculateExerciseCalories(sportName, currentExercise.met, duration);
+                const exerciseRecord = {
+                    id: Date.now().toString(),
+                    name: sportName,
+                    duration: duration,
+                    calories: Utils.toFixedOne(calories),
+                    type: exerciseType
+                };
+                
+                // 添加到运动记录
+                const record = DataManager.getExerciseRecord(currentDate);
+                record.exercises.push(exerciseRecord);
+                DataManager.saveExerciseRecord(currentDate, record);
+                
+                // 更新显示
+                loadExerciseRecord();
+                updateTotalExerciseCalories();
+                
+                // 关闭弹窗
+                durationModal.close();
+                currentExercise = null;
+            } else {
+                alert('请输入有效的时长');
+            }
+        }
+
+        // 打开手动添加有氧运动弹窗
+        function openManualAerobicModal() {
+            // 重置表单
+            document.getElementById('manualExerciseName').value = '';
+            document.getElementById('manualExerciseDuration').value = '';
+            document.getElementById('manualExerciseCalories').value = '';
+            manualAerobicModal.open();
+        }
+
+        // 关闭手动添加有氧运动弹窗
+        function closeManualAerobicModal() {
+            manualAerobicModal.close();
+        }
+
+        // 添加手动有氧运动
+        function addManualAerobicExercise() {
+            const name = document.getElementById('manualExerciseName').value;
+            const duration = parseInt(document.getElementById('manualExerciseDuration').value);
+            const calories = parseFloat(document.getElementById('manualExerciseCalories').value);
+            
+            if (name && duration && duration > 0 && calories !== undefined && calories >= 0) {
+                const exerciseRecord = {
+                    id: Date.now().toString(),
+                    name: name,
+                    duration: duration,
+                    calories: Utils.toFixedOne(calories),
+                    type: 'aerobic'
+                };
+                
+                // 添加到运动记录
+                const record = DataManager.getExerciseRecord(currentDate);
+                record.exercises.push(exerciseRecord);
+                DataManager.saveExerciseRecord(currentDate, record);
+                
+                // 更新显示
+                loadExerciseRecord();
+                updateTotalExerciseCalories();
+                
+                // 触发智能建议刷新
+                localStorage.setItem('adviceRefreshNeeded', 'true');
+                
+                // 关闭弹窗
+                manualAerobicModal.close();
+            } else {
+                alert('请填写完整的运动信息，运动名称不能为空');
+            }
+        }
+
+        // 加载运动记录
+        function loadExerciseRecord() {
+            const record = DataManager.getExerciseRecord(currentDate);
+            const aerobicList = document.getElementById('aerobicExerciseList');
+            const anaerobicList = document.getElementById('anaerobicExerciseList');
+            
+            // 清空列表
+            aerobicList.innerHTML = '';
+            anaerobicList.innerHTML = '';
+            
+            // 显示运动记录
+            record.exercises.forEach(exercise => {
+                // 根据运动类型选择对应的列表
+                const list = exercise.type === 'anaerobic' ? anaerobicList : aerobicList;
+                const exerciseItem = document.createElement('div');
+                exerciseItem.className = 'exercise-record';
+                exerciseItem.dataset.id = exercise.id;
+                // 确保运动名称存在，默认使用"未知运动"
+                const sportName = exercise.name || '未知运动';
+                exerciseItem.innerHTML = `
+                    <span class="exercise-name">${sportName}</span>
+                    <span class="exercise-time">${exercise.duration}分钟</span>
+                    <span class="exercise-calorie">${exercise.calories}大卡</span>
+                    <button class="delete-btn" onclick="deleteExercise('${exercise.id}')">×</button>
+                `;
+                list.appendChild(exerciseItem);
+            });
+        }
+
+        // 删除运动
+        function deleteExercise(exerciseId) {
+            const record = DataManager.getExerciseRecord(currentDate);
+            record.exercises = record.exercises.filter(exercise => exercise.id !== exerciseId);
+            DataManager.saveExerciseRecord(currentDate, record);
+            loadExerciseRecord();
+            updateTotalExerciseCalories();
+            
+            // 触发智能建议刷新
+            localStorage.setItem('adviceRefreshNeeded', 'true');
+        }
+
+        // 更新总运动消耗
+        function updateTotalExerciseCalories() {
+            const totalCalories = DataManager.calculateDailyExerciseCalories(currentDate);
+            document.getElementById('totalExerciseCalories').textContent = Utils.toFixedOne(totalCalories);
+            // 将运动消耗更新到localStorage
+            localStorage.setItem('todayExerciseCalorie', totalCalories);
+        }
+
+        // 保存运动记录
+        function saveExerciseRecord() {
+            alert('今日运动记录已保存！');
+        }
+    </script>
+</body>
+</html>
