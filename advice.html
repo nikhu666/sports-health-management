@@ -25,11 +25,11 @@
             box-sizing: border-box;
         }
         
+
+        
+        /* 确保标题颜色与其他页面一致 */
         h1 {
-            text-align: center;
-            color: #2196F3;
-            margin-bottom: 20px;
-            font-size: 24px;
+            color: #21d07a;
         }
         
         /* 建议模块样式 */
@@ -383,7 +383,7 @@
         }
     </style>
 </head>
-<body>
+<body id="advice">
     <div class="container">
         <h1>智能建议</h1>
         
@@ -442,79 +442,85 @@
         <div id="exerciseAdvice" class="advice-module">
             <h2><i>🏃</i>运动建议</h2>
             
-
-            
-            <!-- 当日运动适配建议 -->
-            <div class="today-exercise-advice">
-                <h3>当日运动适配建议</h3>
-                <!-- 减脂目标建议 -->
-                <div class="daily-advice-container">
-                    <div class="advice-header" onclick="toggleAdvice('fat-loss')">
-                        减脂目标适配建议 <span class="icon">▶</span>
+            <!-- 智能运动建议模块 -->
+            <div class="smart-advice-container">
+                <!-- 1. 运动搭配评分 -->
+                <div class="advice-item">
+                    <div class="advice-title" onclick="toggleAdviceItem('exercise-combination')">
+                        <span>1. 运动搭配评分</span>
+                        <span class="icon">▶</span>
                     </div>
-                    <div class="advice-content" id="fat-loss-content">
+                    <div class="advice-content" id="exercise-combination">
                         <div class="advice-section">
-                            <!-- 智能分析模块 -->
-                            <div class="smart-analysis">
-                                <p><span class="score-label">【运动搭配评分】</span><span class="score-number">8/10</span></p>
-                                <p>当日运动为「跳绳（有氧）+ 腹部训练（无氧）」，有氧:无氧时长比=1:1，<strong>该配比契合减脂期“燃脂+保肌”需求</strong>，<em class="gray-text">扣分项为部位覆盖单一（仅核心）</em>。</p>
-                                
-                                <p><span class="score-label">【时长合理性】</span><span class="score-number">9/10</span></p>
-                                <p>单类运动时长均为<span class="data-highlight">30分钟</span>，处于<strong>“有氧有效区间（20-45分钟）+ 无氧有效区间（20-30分钟）”</strong>，<em class="gray-text">无时长过短/过长问题</em>。</p>
-                            </div>
-                            
-                            <h4 class="section-title">1. 运动强度调整</h4>
-                            <p>• 当日运动总消耗：<span class="data-highlight"><span id="fat-loss-total-calorie">0</span>大卡</span> <span class="related-note">（结合【时长合理性】）</span>，该消耗处于中等偏上水平</p>
-                            <p>• 若今日疲劳：次日替换为「<strong>快走40分钟+上肢轻抗阻（哑铃肩推2组×15次）</strong>」，总消耗控制在<span class="data-highlight">350大卡</span>，避免代谢下降</p>
-                            <p>• 若状态良好：今日加练<span class="data-highlight">10分钟</span>间歇训练（<strong>开合跳30秒/波比跳20秒，组间休息20秒</strong>），额外消耗<span class="data-highlight">100大卡</span>，延长后燃效应</p>
-                        </div>
-                        <div class="advice-section">
-                            <h4>2. 饮食精准搭配</h4>
-                            <p>• 训练后30分钟：1个鸡蛋（7g蛋白）+半根香蕉（20g碳水），补糖原防肌肉流失</p>
-                            <p>• 晚餐替换：150g清蒸鱼（25g蛋白）+200g凉拌西兰花（5g纤维）+50g糙米饭（15g碳水），增加饱腹感</p>
-                            <p>• 热量控制：当前缺口<span id="fat-loss-calorie-gap">0</span>大卡，建议保持在300-700大卡区间，避免代谢损伤</p>
-                        </div>
-                        <div class="advice-section">
-                            <h4>3. 恢复与技巧</h4>
-                            <p>• 肌肉放松：泡沫轴滚小腿/腹部各2分钟（每组30秒），缓解乳酸堆积</p>
-                            <p>• 睡眠要求：保证7-8小时睡眠，夜间是脂肪分解关键时段</p>
-                            <p>• 动作规范：跳绳时前脚掌发力、膝盖微屈，避免脚跟落地损伤关节</p>
+                            <p>当日运动搭配评分：<span class="data-value" id="combination-score">0.0</span>/10</p>
+                            <p id="combination-analysis">暂无分析</p>
                         </div>
                     </div>
                 </div>
                 
-                <!-- 增肌目标建议 -->
-                <div class="daily-advice-container">
-                    <div class="advice-header" onclick="toggleAdvice('muscle-gain')">
-                        增肌目标适配建议 <span class="icon">▶</span>
+                <!-- 2. 时长合理性分析 -->
+                <div class="advice-item">
+                    <div class="advice-title" onclick="toggleAdviceItem('duration-rationality')">
+                        <span>2. 时长合理性分析</span>
+                        <span class="icon">▶</span>
                     </div>
-                    <div class="advice-content" id="muscle-gain-content">
+                    <div class="advice-content" id="duration-rationality">
                         <div class="advice-section">
-                            <!-- 智能分析模块 -->
-                            <div class="smart-analysis">
-                                <p><span class="score-label">【运动搭配评分】</span><span class="score-number">8/10</span></p>
-                                <p>当日运动为「跳绳（有氧）+ 腹部训练（无氧）」，有氧:无氧时长比=1:1，<strong>该配比契合增肌期“耐力+力量”需求</strong>，<em class="gray-text">扣分项为部位覆盖单一（仅核心）</em>。</p>
-                                
-                                <p><span class="score-label">【时长合理性】</span><span class="score-number">9/10</span></p>
-                                <p>单类运动时长均为<span class="data-highlight">30分钟</span>，处于<strong>“有氧有效区间（20-45分钟）+ 无氧有效区间（20-30分钟）”</strong>，<em class="gray-text">无时长过短/过长问题</em>。</p>
-                            </div>
-                            
-                            <h4 class="section-title">1. 运动强度调整</h4>
-                            <p>• 当日运动总消耗：<span class="data-highlight"><span id="muscle-gain-total-calorie">0</span>大卡</span> <span class="related-note">（结合【时长合理性】）</span>，该消耗处于中等偏上水平</p>
-                            <p>• 次日训练安排：<strong>腿部训练（深蹲4组×8次+箭步蹲3组×12次/腿）+15分钟椭圆机低强度有氧</strong>，避免影响肌肉恢复</p>
-                            <p>• 组间休息：从<span class="data-highlight">60秒</span>延长至<span class="data-highlight">90秒</span>，动作节奏保持<strong>“2秒发力+3秒离心”</strong>，减少肌纤维二次损伤</p>
+                            <p>今日总运动时长：<span class="data-value" id="total-duration">0</span>分钟</p>
+                            <p id="duration-analysis">暂无分析</p>
                         </div>
+                    </div>
+                </div>
+                
+                <!-- 3. 运动强度调整建议 -->
+                <div class="advice-item">
+                    <div class="advice-title" onclick="toggleAdviceItem('intensity-adjustment')">
+                        <span>3. 运动强度调整建议</span>
+                        <span class="icon">▶</span>
+                    </div>
+                    <div class="advice-content" id="intensity-adjustment">
                         <div class="advice-section">
-                            <h4>2. 饮食精准搭配</h4>
-                            <p>• 训练后30分钟：20g乳清蛋白+1根大香蕉（27g碳水），利用胰岛素峰值促进肌肉修复</p>
-                            <p>• 加餐选择：100g希腊酸奶（10g蛋白）+20g杏仁（10g健康脂肪），维持夜间肌肉合成</p>
-                            <p>• 热量盈余：当前盈余<span id="muscle-gain-calorie-gap">0</span>大卡，建议保持在300-500大卡，避免脂肪堆积</p>
+                            <p>今日运动总消耗：<span class="data-value" id="total-calories">0</span>大卡</p>
+                            <p id="intensity-analysis">暂无分析</p>
                         </div>
+                    </div>
+                </div>
+                
+                <!-- 4. 锻炼饮食建议 -->
+                <div class="advice-item">
+                    <div class="advice-title" onclick="toggleAdviceItem('exercise-diet')">
+                        <span>4. 锻炼饮食建议</span>
+                        <span class="icon">▶</span>
+                    </div>
+                    <div class="advice-content" id="exercise-diet">
                         <div class="advice-section">
-                            <h4>3. 恢复与技巧</h4>
-                            <p>• 静态拉伸：胸部/背部各拉伸30秒×2组，改善肌肉柔韧性</p>
-                            <p>• 营养补充：每日补充1000mg维生素C（1个橙子+100g猕猴桃），缓解训练炎症</p>
-                            <p>• 动作规范：深蹲时膝盖与脚尖同向、不超过脚尖，避免膝关节压力过大</p>
+                            <p id="diet-suggestion">暂无建议</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 5. 恢复与技巧建议 -->
+                <div class="advice-item">
+                    <div class="advice-title" onclick="toggleAdviceItem('recovery-tips')">
+                        <span>5. 恢复与技巧建议</span>
+                        <span class="icon">▶</span>
+                    </div>
+                    <div class="advice-content" id="recovery-tips">
+                        <div class="advice-section">
+                            <p id="recovery-suggestion">暂无建议</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 6. 明日运动建议 -->
+                <div class="advice-item">
+                    <div class="advice-title" onclick="toggleAdviceItem('tomorrow-suggestion')">
+                        <span>6. 明日运动建议</span>
+                        <span class="icon">▶</span>
+                    </div>
+                    <div class="advice-content" id="tomorrow-suggestion">
+                        <div class="advice-section">
+                            <p id="tomorrow-exercise">暂无建议</p>
                         </div>
                     </div>
                 </div>
@@ -591,9 +597,16 @@
                 // 查找食物数据库中的营养信息
                 const foodInfo = window.FOOD_DB.find(food => food.name === foodItem.name);
                 if (foodInfo) {
-                    // 假设foodItem.quantity是食用量（克），foodInfo的营养信息是每100克的含量
-                    const quantity = foodItem.quantity || 100;
-                    const ratio = quantity / 100;
+                    // foodItem.weight是实际食用量（克），foodInfo的营养信息是每100克的含量
+                    // 如果weight不存在，则使用quantity（已转换为100克的倍数）
+                    let ratio;
+                    if (foodItem.weight) {
+                        // 使用实际克数计算比例
+                        ratio = foodItem.weight / 100;
+                    } else {
+                        // 使用已转换的100克倍数
+                        ratio = foodItem.quantity || 1.0;
+                    }
                     
                     protein += foodInfo.nutrients.protein * ratio;
                     carbs += foodInfo.nutrients.carb * ratio;
@@ -683,7 +696,7 @@
                 advice.push({
                     title: '蛋白质摄入不足',
                     content: `当前摄入 <span class="data-value">${nutritionData.protein.toFixed(1)}</span> g，建议摄入 <span class="data-value">${suggestedProtein}</span> g，需补充 <span class="data-value need-to-add">${needToAdd}</span> g`,
-                    recommendation: `推荐增加 <span class="food-name">150g 鸡胸肉</span>（每100g含20g蛋白）<span class="food-nutrition">（可补充约30g蛋白）</span> + <span class="food-name">2个鸡蛋</span>（约12.6g蛋白）<span class="food-nutrition">（可补充约12.6g蛋白）</span>`
+                    recommendation: `推荐增加 <span class="food-name">150g 鸡胸肉</span>（每100g含20g蛋白）<span class="food-nutrition">（可补充约30g蛋白）</span> + <span class="food-name">2个鸡蛋</span>（约12.6g蛋白）<span class="food-nutrition">（可补充约12.6g蛋白）</span>，或选择 <span class="food-name">30g蛋白粉</span>（每100g含80g蛋白）<span class="food-nutrition">（可快速补充约24g优质蛋白）</span>`
                 });
             } else if (nutritionData.protein > parseFloat(suggestedProtein) * 1.2) {
                 const needToReduce = (nutritionData.protein - parseFloat(suggestedProtein)).toFixed(1);
@@ -882,37 +895,13 @@
           calorieGap: 500 // 热量缺口（减脂为正，增肌为负）
         };
 
-        // 渲染运动建议
-        function renderExerciseAdvice() {
-            const nutritionData = calculateNutritionData();
-            
-            // 计算总运动消耗
-            const totalCalorie = userDailyData.todaySports.reduce((a, b) => a + b.calorie, 0);
-            
-            // 更新减脂建议数据
-            document.getElementById('fat-loss-total-calorie').textContent = totalCalorie;
-            document.getElementById('fat-loss-calorie-gap').textContent = userDailyData.calorieGap;
-            
-            // 更新增肌建议数据
-            document.getElementById('muscle-gain-total-calorie').textContent = totalCalorie;
-            document.getElementById('muscle-gain-calorie-gap').textContent = Math.abs(userDailyData.calorieGap);
-            
-            // 根据目标类型控制显示
-            const goalType = userDailyData.goalType;
-            if (goalType === "减脂") {
-              // 默认展开减脂建议
-              document.querySelector('[onclick="toggleAdvice(\'fat-loss\')"]').classList.add('active');
-            } else if (goalType === "增肌") {
-              // 默认展开增肌建议
-              document.querySelector('[onclick="toggleAdvice(\'muscle-gain\')"]').classList.add('active');
-            }
-        }
+        // 渲染运动建议的逻辑已移至app.js中的initAdvicePage函数
         
         // 全量数据刷新函数
         function refreshAllData() {
             try {
                 renderDietAdvice();
-                renderExerciseAdvice();
+                // 运动建议由app.js中的initAdvicePage函数处理
             } catch (error) {
                 console.error('数据刷新失败:', error);
                 // 使用兜底值确保页面不崩溃
@@ -929,6 +918,10 @@
         document.addEventListener('DOMContentLoaded', function() {
             // 初始化渲染
             refreshAllData();
+            // 初始化运动建议模块
+            if (typeof initAdvicePage !== 'undefined') {
+                initAdvicePage();
+            }
             
             // 全局展开/折叠函数，确保运动建议切换功能正常
             window.toggleAdvice = function(id) {
@@ -979,6 +972,61 @@
             });
             
 
+        });
+    </script>
+    <!-- 引入JavaScript文件 -->
+    <script src="js/common.js"></script>
+    <script src="js/app.js"></script>
+    
+    <!-- 测试脚本：直接测试DOM元素访问和修改 -->
+    <script>
+        console.log('测试脚本开始执行...');
+        
+        // 等待DOM完全加载
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM已完全加载');
+            
+            // 测试DOM元素访问
+            const exerciseCombination = document.getElementById('exercise-combination');
+            console.log('exercise-combination元素:', exerciseCombination);
+            
+            const durationRationality = document.getElementById('duration-rationality');
+            console.log('duration-rationality元素:', durationRationality);
+            
+            const intensityAdjustment = document.getElementById('intensity-adjustment');
+            console.log('intensity-adjustment元素:', intensityAdjustment);
+            
+            const exerciseDiet = document.getElementById('exercise-diet');
+            console.log('exercise-diet元素:', exerciseDiet);
+            
+            const recoveryTips = document.getElementById('recovery-tips');
+            console.log('recovery-tips元素:', recoveryTips);
+            
+            const tomorrowSuggestion = document.getElementById('tomorrow-suggestion');
+            console.log('tomorrow-suggestion元素:', tomorrowSuggestion);
+            
+            // 直接修改DOM元素内容
+            if (exerciseCombination) {
+                exerciseCombination.innerHTML = '<div class="advice-section"><p>测试内容：运动搭配评分</p><p>这是一个测试，确认DOM元素可以被修改</p></div>';
+                exerciseCombination.style.display = 'block';
+                console.log('已修改exercise-combination内容');
+            }
+            
+            // 展开所有内容
+            const adviceContents = document.querySelectorAll('.advice-content');
+            console.log('找到的.advice-content元素数量:', adviceContents.length);
+            adviceContents.forEach((content, index) => {
+                content.style.display = 'block';
+                console.log(`已展开第${index+1}个建议内容`);
+            });
+            
+            // 直接测试initAdvicePage函数
+            if (typeof initAdvicePage === 'function') {
+                console.log('initAdvicePage函数存在，尝试直接调用...');
+                initAdvicePage();
+            } else {
+                console.log('ERROR: initAdvicePage函数不存在！');
+            }
         });
     </script>
 </body>

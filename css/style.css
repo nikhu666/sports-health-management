@@ -11,6 +11,11 @@ body {
     color: #333;
     line-height: 1.6;
     font-size: 14px;
+    /* 【可滚动区域扩展】优化页面滚动规则 */
+    overflow-x: hidden; /* 禁止横向滚动 */
+    overflow-y: auto; /* 强制启用垂直滚动 */
+    min-height: 120vh; /* 最小高度设置为屏幕高度的120% */
+    padding-bottom: 50px; /* 底部预留至少50px空白区域 */
 }
 
 /* 容器样式 */
@@ -18,7 +23,7 @@ body {
     max-width: 480px;
     margin: 0 auto;
     padding: 20px;
-    min-height: 100vh;
+    min-height: 800px; /* 固定最小高度800px以上，适配手机/平板 */
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
@@ -563,6 +568,53 @@ input[type="radio"] {
     font-weight: bold;
     position: absolute;
     left: 0;
+}
+
+/* 智能运动建议容器 */
+.smart-advice-container {
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-top: 15px;
+}
+
+/* 运动建议项 */
+.smart-advice-container .advice-item {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #eee;
+}
+
+.smart-advice-container .advice-item .advice-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+    padding: 5px 0;
+}
+
+.smart-advice-container .advice-item .advice-title .icon {
+    font-size: 14px;
+    color: #2196F3;
+    margin-left: 10px;
+}
+
+.smart-advice-container .advice-item .advice-content {
+    display: none; /* 默认收起状态 */
+    padding: 10px 0;
+    color: #666;
+    line-height: 1.5;
+}
+
+.smart-advice-container .advice-item .advice-content .data-value {
+    font-weight: bold;
+    color: #2196F3;
+    margin-right: 5px;
 }
 
 /* 响应式设计 */

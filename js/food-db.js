@@ -122,6 +122,7 @@ const FOOD_DB = [
   { name: "鸭蛋", category: "肉类", calorie: 180, nutrients: { protein: 12.6, carb: 3.1, fat: 13 } },
   { name: "鹅蛋", category: "肉类", calorie: 196, nutrients: { protein: 11.1, carb: 2.8, fat: 15.6 } },
   { name: "鱼翅", category: "肉类", calorie: 124, nutrients: { protein: 83, carb: 0, fat: 0.3 } },
+  { name: "蛋白粉", category: "营养补剂", calorie: 350, nutrients: { protein: 80, carb: 3, fat: 2 } },
   { name: "海参", category: "肉类", calorie: 78, nutrients: { protein: 16.5, carb: 0, fat: 0.2 } },
   { name: "鲍鱼", category: "肉类", calorie: 84, nutrients: { protein: 19, carb: 1.5, fat: 0.8 } },
   { name: "蟹肉", category: "肉类", calorie: 95, nutrients: { protein: 18.1, carb: 1.1, fat: 2.1 } },
