@@ -1,0 +1,649 @@
+/* 全局样式重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+    font-size: 14px;
+    /* 【可滚动区域扩展】优化页面滚动规则 */
+    overflow-x: hidden; /* 禁止横向滚动 */
+    overflow-y: auto; /* 强制启用垂直滚动 */
+    min-height: 120vh; /* 最小高度设置为屏幕高度的120% */
+    padding-bottom: 50px; /* 底部预留至少50px空白区域 */
+}
+
+/* 容器样式 */
+.container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 800px; /* 固定最小高度800px以上，适配手机/平板 */
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* 标题样式 */
+h1, h2, h3 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 24px;
+    text-align: center;
+    color: #21d07a;
+    margin-top: 10px;
+}
+
+h2 {
+    font-size: 18px;
+    margin-top: 30px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+h3 {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+/* 智能分析模块样式 */
+.smart-analysis {
+    background-color: #f0f8ff;
+    border: 1px solid #e0f0ff;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.smart-analysis p {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.smart-analysis p:last-child {
+    margin-bottom: 0;
+}
+
+/* 评分模块样式 */
+.score-label {
+    background-color: #E8F4FD;
+    color: #2196F3;
+    font-weight: bold;
+    padding: 2px 4px;
+    border-radius: 2px;
+}
+
+.score-number {
+    color: #FF9800;
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-left: 5px;
+}
+
+/* 灰色斜体文本 */
+.gray-text {
+    color: #666;
+    font-style: italic;
+}
+
+/* 板块标题样式 */
+.section-title {
+    color: #2196F3;
+    font-weight: bold;
+    border-left: 3px solid #2196F3;
+    padding-left: 4px;
+    margin-bottom: 10px;
+}
+
+/* 数据类重点内容 */
+.data-highlight {
+    color: #FF9800;
+    font-weight: bold;
+}
+
+/* 关联说明 */
+.related-note {
+    color: #666;
+    font-size: 0.9em;
+    margin-left: 5px;
+}
+
+/* 表单元素样式 */
+.input-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #666;
+    font-weight: 500;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+select:focus {
+    border-color: #21d07a;
+}
+
+/* 单选按钮样式 */
+.radio-group {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.radio-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+input[type="radio"] {
+    accent-color: #21d07a;
+}
+
+/* 按钮样式 */
+.btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    outline: none;
+}
+
+.btn-primary {
+    background-color: #21d07a;
+    color: white;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.btn-primary:hover {
+    background-color: #1aa762;
+}
+
+.btn-secondary {
+    background-color: #f5f7fa;
+    color: #666;
+    border: 1px solid #ddd;
+}
+
+.btn-secondary:hover {
+    background-color: #e9ecef;
+}
+
+.btn-small {
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
+/* 卡片样式 */
+.card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+/* 圆形卡片布局 */
+.circle-cards {
+    display: flex;
+    justify-content: space-between;
+    margin: 30px 0;
+}
+
+.circle-card {
+    border-radius: 50%;
+    border: 4px solid #4CAF50;
+    background: #f8fff9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+    margin: 0 15px;
+}
+
+.circle-card.small {
+    width: 100px;
+    height: 100px;
+    padding: 15px;
+}
+
+.circle-card.medium {
+    width: 120px;
+    height: 120px;
+    padding: 20px;
+}
+
+.circle-card.large {
+    width: 150px;
+    height: 150px;
+    padding: 25px;
+}
+
+.circle-card .value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 5px;
+}
+
+.circle-card .label {
+    font-size: 14px;
+    color: #444;
+}
+
+/* 热量缺口圆环样式 */
+.circle-card.calorie-gap-circle {
+    border-color: #2196F3;
+    background: #f0f8ff;
+    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+}
+
+.circle-card.calorie-gap-circle .value {
+    color: #2196F3;
+}
+
+/* 饮食和运动项目列表 */
+.item-list {
+    margin: 20px 0;
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+    margin-bottom: 10px;
+}
+
+.item .name {
+    font-weight: 500;
+}
+
+.item .calories {
+    color: #21d07a;
+    font-weight: bold;
+}
+
+.item .btn-delete {
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 运动记录项样式：增强对比度 */
+.exercise-record {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    margin: 10px 0;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #f0f0f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    gap: 20px;
+}
+
+/* 运动信息区域：包含名称和时间 */
+.exercise-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* 运动名称：突出显示 */
+.exercise-name {
+    font-weight: 600;
+    color: #222;
+    min-width: 70px;
+}
+
+/* 时间和热量：调整样式 */
+.exercise-time {
+    color: #555;
+}
+
+.exercise-calorie {
+    color: #555;
+    font-size: 14px;
+    margin-right: auto;
+}
+
+/* 删除按钮：增强视觉 */
+.delete-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #ff5252;
+    color: #fff;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 运动分类区域 */
+.exercise-section {
+    margin-bottom: 30px;
+}
+
+.exercise-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.exercise-btn {
+    padding: 12px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.exercise-btn:hover {
+    border-color: #21d07a;
+    color: #21d07a;
+}
+
+/* 弹窗样式 */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-title {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+}
+
+.btn-close:hover {
+    color: #666;
+}
+
+/* 日历组件样式 */
+.calendar {
+    width: 100%;
+    margin: 20px 0;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.calendar-day {
+    padding: 10px;
+    text-align: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+}
+
+.calendar-day:hover {
+    background-color: #f0f0f0;
+}
+
+.calendar-day.active {
+    background-color: #21d07a;
+    color: white;
+}
+
+.calendar-day.other-month {
+    color: #ccc;
+}
+
+/* 底部导航栏 */
+.nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    max-width: 480px;
+    margin: 0 auto;
+    z-index: 100;
+}
+
+.nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 5px;
+}
+
+.nav-btn.active {
+    color: #21d07a;
+}
+
+.nav-btn i {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+/* 信息显示区域 */
+.info-display {
+    background-color: #f0fff5;
+    border: 1px solid #c3f5d8;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.info-value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #21d07a;
+    margin: 10px 0;
+}
+
+.info-label {
+    color: #666;
+    font-size: 14px;
+}
+
+/* 智能建议卡片 */
+.advice-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+.advice-item {
+    margin-bottom: 15px;
+    padding-left: 20px;
+    position: relative;
+}
+
+.advice-item::before {
+    content: "•";
+    color: #21d07a;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+/* 智能运动建议容器 */
+.smart-advice-container {
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-top: 15px;
+}
+
+/* 运动建议项 */
+.smart-advice-container .advice-item {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #eee;
+}
+
+.smart-advice-container .advice-item .advice-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+    padding: 5px 0;
+}
+
+.smart-advice-container .advice-item .advice-title .icon {
+    font-size: 14px;
+    color: #2196F3;
+    margin-left: 10px;
+}
+
+.smart-advice-container .advice-item .advice-content {
+    display: none; /* 默认收起状态 */
+    padding: 10px 0;
+    color: #666;
+    line-height: 1.5;
+}
+
+.smart-advice-container .advice-item .advice-content .data-value {
+    font-weight: bold;
+    color: #2196F3;
+    margin-right: 5px;
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .circle-card.small {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .circle-card.medium {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .circle-card.large {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .circle-card .value {
+        font-size: 20px;
+    }
+}
+
+/* 隐藏类 */
+.hidden {
+    display: none;
+}

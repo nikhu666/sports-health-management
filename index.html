@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>个人信息录入 - 健身管理APP</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>个人信息录入</h1>
+
+        <!-- 头像上传 -->
+        <div class="input-group">
+            <label>头像</label>
+            <div style="text-align: center; margin-bottom: 15px;">
+                <img id="avatarPreview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23e0e0e0'/%3E%3Ctext x='50' y='60' text-anchor='middle' font-size='40' fill='%23999'%3E👤%3C/text%3E%3C/svg%3E" alt="头像" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 10px;">
+                <br>
+                <input type="file" id="avatar" accept="image/*" style="display: none;">
+                <button type="button" class="btn btn-primary" onclick="document.getElementById('avatar').click()">上传头像</button>
+            </div>
+        </div>
+
+        <form id="userInfoForm">
+            <!-- 姓名 -->
+            <div class="input-group">
+                <label for="name">姓名</label>
+                <input type="text" id="name" name="name" placeholder="请输入您的姓名">
+            </div>
+
+            <!-- 性别 -->
+            <div class="input-group">
+                <label for="gender">性别</label>
+                <select id="gender" name="gender">
+                    <option value="male">男</option>
+                    <option value="female">女</option>
+                </select>
+            </div>
+
+            <!-- 年龄 -->
+            <div class="input-group">
+                <label for="age">年龄</label>
+                <input type="number" id="age" name="age" placeholder="请输入您的年龄" min="1">
+            </div>
+
+            <!-- 身高 -->
+            <div class="input-group">
+                <label for="height">身高 (cm)</label>
+                <input type="number" id="height" name="height" placeholder="请输入您的身高" step="0.1" min="0">
+            </div>
+
+            <!-- 体重 -->
+            <div class="input-group">
+                <label for="weight">体重 (kg)</label>
+                <input type="number" id="weight" name="weight" placeholder="请输入您的体重" step="0.1" min="0">
+            </div>
+
+
+
+            <!-- 运动目标 -->
+            <div class="input-group">
+                <label>运动目标</label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="weight_loss" name="goal" value="weight_loss" checked>
+                        <label for="weight_loss">减脂</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="muscle_gain" name="goal" value="muscle_gain">
+                        <label for="muscle_gain">增肌</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 计算结果显示 -->
+            <div class="info-display">
+                <div>
+                    <div class="info-label">基础代谢率 (BMR)</div>
+                    <div class="info-value" id="bmr">0.0</div>
+                    <div class="info-label">大卡/天</div>
+                </div>
+                <div style="margin-top: 15px;">
+                    <div class="info-label">每日总消耗 (TDEE)</div>
+                    <div class="info-value" id="tdee">0.0</div>
+                    <div class="info-label">大卡/天</div>
+                </div>
+            </div>
+        </form>
+
+        <!-- 保存按钮 -->
+        <!-- 【按钮可视性保障】优化保存按钮位置 -->
+        <div style="position: fixed; bottom: 70px; left: 0; right: 0; padding: 0 20px; max-width: 480px; margin: 0 auto;">
+            <button type="button" id="saveButton" class="btn btn-primary">保存个人信息</button>
+        </div>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <div class="nav">
+        <button class="nav-btn active" data-page="index">
+            <i>👤</i>
+            <span>个人</span>
+        </button>
+        <button class="nav-btn" data-page="diet">
+            <i>🍽️</i>
+            <span>饮食</span>
+        </button>
+        <button class="nav-btn" data-page="exercise">
+            <i>🏃</i>
+            <span>运动</span>
+        </button>
+        <button class="nav-btn" data-page="advice">
+            <i>💡</i>
+            <span>建议</span>
+        </button>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
